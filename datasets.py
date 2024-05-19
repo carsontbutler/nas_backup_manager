@@ -4,6 +4,7 @@ from logger import logger
 from truenas_api import TrueNASClient
 
 import glob
+import os
 import subprocess
 
 
@@ -59,7 +60,22 @@ class Dataset:
 
 
 class FrigateBackup(Dataset):
-    pass
+    def purge_old_recordings(self):
+        if not self.connect():
+            logger.warn(f"{self.id} not connected. Skipping purge.")
+            return
+        over_threshold = self.over_threshold()
+        if over_threshold:
+            logger.warn(f"{self.id} over threshold. Purging old files.")
+        while over_threshold:
+            path = (f"{MOUNT_PATH}/smb-share:server="
+                    f"{TRUENAS_ROOT_URL},share={self.id}/recordings")
+            files = sorted(os.listdir(path))
+            target_file = files[0]
+            logger.info(f"Deleting {target_file}")
+            delete_dir(f"{path}/{target_file}")
+            over_threshold = self.over_threshold()
+        logger.info(f"{self.id} under threshold.")
 
 
 class Frigate(Dataset):
