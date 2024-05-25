@@ -3,8 +3,8 @@ from logger import logger
 
 
 def main():
-    logger.info("ProgramStart")
 
+    logger.info("ProgramStart")
     logger.info("Checking if frigate-backup needs purging.")
     frigate_backup.purge_old_recordings()
 
@@ -12,4 +12,7 @@ def main():
     frigate.run_backup()
 
 
-main()
+try:
+    main()
+except Exception as err:
+    logger.info(f"Main failed with error: {err}")

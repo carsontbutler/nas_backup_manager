@@ -4,8 +4,10 @@ from logger import logger
 
 
 def to_gb(input):
-    size, unit = int(input[:-1]), input[-1]
-    if unit.upper() == 'G':
+    size, unit = float(input[:-1]), input[-1]
+    if unit.upper() == 'T':
+        return round(size * 1000, 2)
+    elif unit.upper() == 'G':
         return size
     elif unit.upper() == 'M':
         return size * .001

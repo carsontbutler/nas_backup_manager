@@ -22,6 +22,7 @@ class Dataset:
         self.threshold = threshold
         self.backup_destination = backup_destination
         self.backup_targets = backup_targets
+        logger.info(self.__dict__)
 
     def check_connection(self):
         ls = glob.glob(MOUNT_PATH + '/*')
@@ -108,7 +109,7 @@ class Frigate(Dataset):
                 logger.warn(f"{self.id}: no files found for backup.")
                 continue
 
-            logger.info(f"files needing backup: {files_to_backup}")
+            logger.info(f"files needing backup: {sorted(files_to_backup)}")
             logger.info(f"files with mismatched sizes: {files_wrong_size}")
 
             backup_target = sorted(files_to_backup)[0]
@@ -159,6 +160,6 @@ frigate = Frigate(
                 id="frigate",
                 path="frigate",
                 pool="cctv",
-                threshold=750,
+                threshold=700,
                 backup_destination=frigate_backup,
                 backup_targets=["recordings", "clips"])
