@@ -38,6 +38,7 @@ class Dataset:
             cmd = subprocess.run(
                 f"gio mount smb://{TRUENAS_ROOT_URL}/{self.id}".split(" "),
                 capture_output=True)
+            logger.info(f"cmd = {cmd}")
             if cmd.returncode == 0:
                 logger.info("Mounted successfully")
                 return True
@@ -154,7 +155,7 @@ frigate_backup = FrigateBackup(
                 id="frigate-backup",
                 path="frigate-backup",
                 pool="backup",
-                threshold=3300)
+                threshold=3050)
 
 frigate = Frigate(
                 id="frigate",
